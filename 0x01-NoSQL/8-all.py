@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 """All docs"""
 
-from typing import List
-from pymongo.collection import Collection
+from pymongo import MongoClient
 
 
-def list_all(mongo_collection: Collection) -> List[dict]:
+def list_all(mongo_collection):
     """Lists all documents in a collection"""
-    return list(mongo_collection.find())
+    return mongo_collection.find()
