@@ -55,7 +55,8 @@ class Cache:
         self._redis.rpush(key, *data)
         return key
 
-    def get(self, key: str, fn: Callable = None) -> Union[str, bytes, int, float, None]:
+    def get(self, key: str, fn: Callable = None
+            ) -> Union[str, bytes, int, float, None]:
         """Retrieve data from Redis"""
         data = self._redis.get(key)
         if data is None:
