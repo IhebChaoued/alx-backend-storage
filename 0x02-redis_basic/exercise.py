@@ -36,7 +36,8 @@ class Cache:
         self._redis.set(key, data)
         return key
 
-    def get(self, key: str, fn: Callable = None) -> Union[str, bytes, int, float, None]:
+    def get(self, key: str, fn: Callable = None)
+    -> Union[str, bytes, int, float, None]:
         """Retrieve data from Redis"""
         data = self._redis.get(key)
         if data is None:
@@ -57,8 +58,14 @@ class Cache:
 def replay(func: Callable):
     """Display the history of calls of a particular function."""
     inputs = cache._redis.lrange("{}:inputs".format(func.__qualname__), 0, -1)
-    outputs = cache._redis.lrange("{}:outputs".format(func.__qualname__), 0, -1)
+    outputs = cache._redis.lrange
+    ("{}:outputs".format(func.__qualname__), 0, -1)
 
     print("{} was called {} times:".format(func.__qualname__, len(inputs)))
     for input_data, output_data in zip(inputs, outputs):
-        print("{}(*{}) -> {}".format(func.__qualname__, input_data, output_data))
+        print("{}(*{}) -> {}".format(
+            func.__qualname__,
+            input_data,
+            output_data
+            )
+            )
