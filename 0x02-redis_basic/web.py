@@ -22,3 +22,9 @@ def get_page(url: str) -> str:
     r.setex(url, 10, html_content)
 
     return html_content
+
+
+if __name__ == "__main__":
+    url = "http://slowwly.robertomurray.co.uk/delay/5000/url/" \
+          "http://www.example.com"
+    print(get_page(url))
