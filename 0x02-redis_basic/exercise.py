@@ -26,12 +26,13 @@ class Cache:
 
     @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
-        """Store the input data in Redis using a random key and return the key"""
+        """Store the input data in Redis"""
         key = str(uuid.uuid4())
         self._redis.set(key, data)
         return key
 
-    def get(self, key: str, fn: Callable = None) -> Union[str, bytes, int, float, None]:
+    def get(self, key: str, fn: Callable = None)
+    -> Union[str, bytes, int, float, None]:
         """Retrieve data from Redis"""
         data = self._redis.get(key)
         if data is None:
