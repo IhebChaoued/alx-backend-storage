@@ -31,7 +31,7 @@ class Cache:
 
     @call_history
     def store(self, data: Union[str, bytes, int, float]) -> str:
-        """Store the input data in Redis using a random key and return the key"""
+        """Store the input data in Redis"""
         key = str(uuid.uuid4())
         self._redis.set(key, data)
         return key
