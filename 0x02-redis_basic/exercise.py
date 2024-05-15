@@ -20,9 +20,11 @@ def call_history(method: Callable) -> Callable:
     """Decorator to store the history of inputs and outputs for a function."""
     @wraps(method)
     def wrapper(self, *args, **kwargs):
-        input_key = "{}:inputs".format(method.__qualname__)
-        output_key = "{}:outputs".format(method.__qualname__)
-
+        class_name = self.__class__.__name__
+        method_name = method.__name__
+        input_key = f"{class_name}.{method_name}:inputs"
+        output_key = f"{class_name}.{method_name}:outputs"
+        
         self._redis.rpush(input_key, str(args))
         output = method(self, *args, **kwargs)
         self._redis.rpush(output_key, output)
