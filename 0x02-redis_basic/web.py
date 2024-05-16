@@ -1,33 +1,43 @@
 #!/usr/bin/env python3
-"""Cache & tracker"""
+""" Module for web functions """
 
-from typing import Callable
-from functools import wraps
-import redis
 import requests
-redis_client = redis.Redis()
+import redis
+from functools import wraps
 
 
-def url_count(method: Callable) -> Callable:
-    """Decorator to count the number of times a URL is accessed."""
-    @wraps(method)
-    def wrapper(*args, **kwargs):
-        url = args[0]
-        redis_client.incr(f"count:{url}")
-        cached = redis_client.get(f'{url}')
-        if cached:
-            return cached.decode('utf-8')
-        redis_client.setex(f'{url}, 10, {method(url)}')
-        return method(*args, **kwargs)
+def track_and_cache(func):
+    """ Decorator to track and cache page requests """
+    @wraps(func)
+    def wrapper(url):
+        """ Wrapper function to track and cache page requests """
+        redis_conn = redis.Redis()
+
+        url_count_key = f"count:{url}"
+        redis_conn.incr(url_count_key)
+
+        cached_content = redis_conn.get(url)
+        if cached_content:
+            return cached_content.decode('utf-8')
+
+        response = requests.get(url)
+        page_content = response.text
+
+        redis_conn.setex(url, 10, page_content)
+
+        return page_content
+
     return wrapper
 
 
-@url_count
+@track_and_cache
 def get_page(url: str) -> str:
-    """Retrieve a web page and cache its content."""
-    response = requests.get(url)
-    return response.text
+    """ Function to get page content """
+    return requests.get(url).text
 
 
 if __name__ == "__main__":
-    get_page('http://slowwly.robertomurray.co.uk')
+    url = ("http://slowwly.robertomurray.co.uk/"
+           "delay/1000/url/"
+           "https://www.example.com")
+    print(get_page(url))
